@@ -1,0 +1,15 @@
+<resources>
+	<string name="app_name">PhotoUtility</string>
+
+	<string name="action_camera">Camera</string>
+	<string name="action_gallery">Gallery</string>
+	<string name="action_camera_gallery">Camera + Gallery</string>
+	<string name="action_gallery_recent">Gallery recent</string>
+
+	<string name="choose_camera_picker">Choose camera</string>
+	<string name="choose_gallery_picker">Choose gallery</string>
+
+	<string name="toast_gallery_access_denied">Access to your photos was denied. Could not read image.</string>
+
+	<string name="error">Whooops! An error occurred</string>
+</resources>
