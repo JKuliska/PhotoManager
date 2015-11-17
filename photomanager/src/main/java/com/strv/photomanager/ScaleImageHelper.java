@@ -1,11 +1,10 @@
-package com.strv.photoutility;
+package com.strv.photomanager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.os.AsyncTask;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -14,25 +13,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
-public class ScaleImageAsyncTask extends AsyncTask<File, Void, File> {
+public class ScaleImageHelper {
 
 	private int mReqWidth;
 	private int mReqHeight;
-	private OnFileScaledListener mListener;
 	private Context mContext;
 
 
-	public ScaleImageAsyncTask(Context context, int width, int height, OnFileScaledListener listener) {
+	public ScaleImageHelper(Context context, int width, int height) {
 		mReqWidth = width;
 		mReqHeight = height;
-		mListener = listener;
 		mContext = context;
 	}
 
 
-	@Override
-	protected File doInBackground(File... params) {
-		final String photoPath = params[0].getAbsolutePath();
+	public File scaleImageFile(File file) throws IOException {
+		final String photoPath = file.getAbsolutePath();
 		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
 		bmOptions.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(photoPath, bmOptions);
@@ -62,19 +58,7 @@ public class ScaleImageAsyncTask extends AsyncTask<File, Void, File> {
 		bitmap.recycle();
 		Bitmap scaledBitmap = checkOrientationAndSize(photoPath, (int) width, (int) height, mReqWidth, mReqHeight);
 
-		try {
-			return writeCompressedBitmap(mContext, scaledBitmap);
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-
-	@Override
-	protected void onPostExecute(File file) {
-		mListener.onFileScaled(file);
+		return writeCompressedBitmap(mContext, scaledBitmap);
 	}
 
 
@@ -163,7 +147,4 @@ public class ScaleImageAsyncTask extends AsyncTask<File, Void, File> {
 		}
 	}
 
-	public interface OnFileScaledListener {
-		void onFileScaled(File file);
-	}
 }
