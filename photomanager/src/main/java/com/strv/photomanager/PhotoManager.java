@@ -14,6 +14,7 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -420,6 +421,10 @@ public class PhotoManager {
 		if(uri.getScheme().equals("file")) {
 			publishPhotoToSystemGallery(context, uri);
 			File file = getFileFromUri(uri);
+			//if the file cannot be read, there might be a problem with read permission not being granted, this can happen e.g. when the file is picked from Dropbox
+			if(!file.canRead()) {
+				throw new SecurityException();
+			}
 			if(listener != null) {
 				listener.onFileFromUriExtracted(file);
 			}

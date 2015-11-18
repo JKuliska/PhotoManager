@@ -3,6 +3,7 @@ package com.strv.photoutility;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +15,10 @@ import android.widget.Toast;
 import com.strv.photomanager.PhotoManager;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 public abstract class PhotoBaseFragment extends Fragment {
@@ -31,6 +35,7 @@ public abstract class PhotoBaseFragment extends Fragment {
 
 
 	protected abstract void imageLoadedForUri(Uri photoUri);
+	protected abstract void imageLoadedForUri(File imageFile);
 	protected abstract void imageFileLoaded(File file);
 
 
@@ -114,8 +119,12 @@ public abstract class PhotoBaseFragment extends Fragment {
 		});
 
 		if(photoUri != null) {
+			if(photoUri.getScheme().equals("file")) {
+				imageLoadedForUri(new File(photoUri.getPath()));
+			} else {
+				imageLoadedForUri(photoUri);
+			}
 			mPhotoUri = photoUri;
-			imageLoadedForUri(photoUri);
 		}
 		//save the request code and data to member variable, the runtime permission request was already handled in PhotoManager.onActivityResult()
 		else {

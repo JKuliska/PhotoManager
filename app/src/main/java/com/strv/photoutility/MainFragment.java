@@ -1,7 +1,10 @@
 package com.strv.photoutility;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,8 +29,16 @@ public class MainFragment extends PhotoBaseFragment {
 
 	@Override
 	protected void imageLoadedForUri(Uri photoUri) {
-		if(mPhotoUri != null && mImageView != null) {
-			Glide.with(getActivity()).load(mPhotoUri).into(mImageView);
+		if(photoUri != null && mImageView != null) {
+			Glide.with(getActivity()).load(photoUri).into(mImageView);
+		}
+	}
+
+
+	@Override
+	protected void imageLoadedForUri(File imageFile) {
+		if(imageFile != null && mImageView != null) {
+			Glide.with(getActivity()).load(imageFile).into(mImageView);
 		}
 	}
 
@@ -35,7 +46,7 @@ public class MainFragment extends PhotoBaseFragment {
 	@Override
 	protected void imageFileLoaded(File file) {
 		if(file != null) {
-			Log.d(TAG, "file size: " + file.length());
+			Log.d(TAG, "file name: " + file.getPath() + " file size: " + file.length());
 		} else {
 			Log.d(TAG, "file is null");
 		}
