@@ -479,7 +479,9 @@ public class PhotoManager {
 				//this happens if the picture is chosen from the gallery
 				if(data != null && data.getData() != null) {
 					//delete file on this Uri because a picture was chosen from gallery and therefore the temp file where the captured photo was supposed to be saved wasn't used
-					deleteFileForUri(photoUri);
+					if(!photoUri.equals(data.getData())) {
+						deleteFileForUri(photoUri);
+					}
 					photoUri = data.getData();
 				}
 
